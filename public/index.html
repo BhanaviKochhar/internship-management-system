@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IMS — Internship Management System</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<div id="app">
+
+  <!-- ═══════════════════════════════════════════════
+       PAGE: LOGIN
+  ════════════════════════════════════════════════ -->
+  <div class="page active" id="page-login">
+    <div class="auth-layout">
+      <div class="auth-card">
+        <div class="brand">
+          <div class="brand-icon">🎓</div>
+          <span class="brand-name">IMS Portal</span>
+        </div>
+        <h2>Welcome back</h2>
+        <p class="auth-subtitle">Sign in to your account to continue</p>
+        <div id="login-alert"></div>
+        <form id="login-form" class="form-grid">
+          <div class="form-group">
+            <label for="login-email">Email <span class="req">*</span></label>
+            <input type="email" id="login-email" name="email" placeholder="you@example.com" autocomplete="username" />
+          </div>
+          <div class="form-group">
+            <label for="login-password">Password <span class="req">*</span></label>
+            <input type="password" id="login-password" name="password" placeholder="••••••••" autocomplete="current-password" />
+          </div>
+          <button type="submit" class="btn btn-primary btn-full btn-lg">Sign In</button>
+        </form>
+        <p class="auth-switch">New student? <a href="#" onclick="Router.go('register');return false;">Create an account</a></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       PAGE: REGISTER
+  ════════════════════════════════════════════════ -->
+  <div class="page" id="page-register">
+    <div class="auth-layout">
+      <div class="auth-card" style="max-width:520px">
+        <div class="brand">
+          <div class="brand-icon">🎓</div>
+          <span class="brand-name">IMS Portal</span>
+        </div>
+        <h2>Student Registration</h2>
+        <p class="auth-subtitle">Create your account to browse and apply for internships</p>
+        <div id="register-alert"></div>
+        <form id="register-form" class="form-grid form-grid-2">
+          <div class="form-group">
+            <label>Full Name <span class="req">*</span></label>
+            <input type="text" name="reg_name" placeholder="Priya Sharma" />
+          </div>
+          <div class="form-group">
+            <label>Email <span class="req">*</span></label>
+            <input type="email" name="reg_email" placeholder="priya@university.edu" />
+          </div>
+          <div class="form-group">
+            <label>Password <span class="req">*</span></label>
+            <input type="password" name="reg_password" placeholder="Min. 6 characters" />
+          </div>
+          <div class="form-group">
+            <label>University ID <span class="req">*</span></label>
+            <input type="text" name="reg_university" placeholder="University ObjectId" />
+          </div>
+          <div class="form-group">
+            <label>Roll Number</label>
+            <input type="text" name="reg_roll" placeholder="22CS001" />
+          </div>
+          <div class="form-group">
+            <label>Department</label>
+            <input type="text" name="reg_dept" placeholder="Computer Science" />
+          </div>
+          <div class="form-group">
+            <label>Graduation Year</label>
+            <input type="number" name="reg_year" placeholder="2026" min="2024" max="2035" />
+          </div>
+          <div class="form-group" style="align-self:flex-end">
+            <button type="submit" class="btn btn-primary btn-full">Create Account</button>
+          </div>
+        </form>
+        <p class="auth-switch">Already have an account? <a href="#" onclick="Router.go('login');return false;">Sign in</a></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       PAGE: SUPER ADMIN
+  ════════════════════════════════════════════════ -->
+  <div class="page" id="page-super-admin">
+    <div class="dashboard-layout">
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <div class="sidebar-brand">
+          <div class="brand-icon">🎓</div>
+          <div>
+            <div class="brand-text">IMS Portal</div>
+            <div class="brand-sub">Super Admin</div>
+          </div>
+        </div>
+        <nav class="sidebar-nav">
+          <div class="nav-section">
+            <div class="nav-section-label">Overview</div>
+            <div class="nav-item" data-view="sa-dashboard"><span class="nav-icon">📊</span><span class="nav-label">Dashboard</span></div>
+          </div>
+          <div class="nav-section">
+            <div class="nav-section-label">Entities</div>
+            <div class="nav-item" data-view="sa-companies"><span class="nav-icon">🏢</span><span class="nav-label">Companies</span></div>
+            <div class="nav-item" data-view="sa-universities"><span class="nav-icon">🏛️</span><span class="nav-label">Universities</span></div>
+          </div>
+          <div class="nav-section">
+            <div class="nav-section-label">Admin Tools</div>
+            <div class="nav-item" data-view="sa-create-admin"><span class="nav-icon">➕</span><span class="nav-label">Create Admin</span></div>
+            <div class="nav-item" data-view="sa-users"><span class="nav-icon">👥</span><span class="nav-label">All Users</span></div>
+          </div>
+        </nav>
+        <div class="sidebar-footer">
+          <div class="sidebar-user">
+            <div class="avatar">SA</div>
+            <div class="sidebar-user-info">
+              <div class="sidebar-user-name">Super Admin</div>
+              <div class="sidebar-user-role">super admin</div>
+            </div>
+          </div>
+          <button class="btn btn-ghost btn-sm btn-full" onclick="logout()">🚪 Logout</button>
+        </div>
+      </aside>
+      <!-- Main -->
+      <div class="main-content">
+        <header class="topbar">
+          <button class="btn btn-icon btn-ghost menu-toggle">☰</button>
+          <span class="topbar-title">Dashboard</span>
+          <div class="topbar-actions"></div>
+        </header>
+        <div class="content-area">
+
+          <!-- Dashboard View -->
+          <div class="view" id="sa-dashboard">
+            <div class="page-header"><div><h2>Overview</h2><p>System-wide statistics at a glance</p></div></div>
+            <div class="stats-grid" id="sa-stats">
+              <div class="stat-card"><div class="stat-icon amber">🏢</div><div><div class="stat-value" id="sa-stat-companies">—</div><div class="stat-label">Companies</div></div></div>
+              <div class="stat-card"><div class="stat-icon blue">🏛️</div><div><div class="stat-value" id="sa-stat-universities">—</div><div class="stat-label">Universities</div></div></div>
+              <div class="stat-card"><div class="stat-icon green">👥</div><div><div class="stat-value" id="sa-stat-users">—</div><div class="stat-label">Total Users</div></div></div>
+              <div class="stat-card"><div class="stat-icon purple">🎓</div><div><div class="stat-value" id="sa-stat-students">—</div><div class="stat-label">Students</div></div></div>
+            </div>
+          </div>
+
+          <!-- Companies View -->
+          <div class="view" id="sa-companies">
+            <div class="page-header">
+              <div><h2>Companies</h2><p>Manage registered companies</p></div>
+              <button class="btn btn-primary" onclick="openModal('modal-company')">➕ Add Company</button>
+            </div>
+            <div class="card">
+              <div class="table-wrap" id="sa-companies-table"><div class="loading-overlay"><span class="spinner"></span> Loading…</div></div>
+            </div>
+          </div>
+
+          <!-- Universities View -->
+          <div class="view" id="sa-universities">
+            <div class="page-header">
+              <div><h2>Universities</h2><p>Manage registered universities</p></div>
+              <button class="btn btn-primary" onclick="openModal('modal-university')">➕ Add University</button>
+            </div>
+            <div class="card">
+              <div class="table-wrap" id="sa-universities-table"><div class="loading-overlay"><span class="spinner"></span> Loading…</div></div>
+            </div>
+          </div>
+
+          <!-- Create Admin View -->
+          <div class="view" id="sa-create-admin">
+            <div class="page-header"><div><h2>Create Admin</h2><p>Provision company or university admins</p></div></div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;" class="create-admin-grid">
+              <!-- Company Admin Card -->
+              <div class="card">
+                <div class="card-header"><span class="card-title">🏢 Company Admin</span></div>
+                <div id="ca-alert"></div>
+                <form id="create-company-admin-form" class="form-grid">
+                  <div class="form-group"><label>Name <span class="req">*</span></label><input type="text" name="ca_name" placeholder="John Doe" /></div>
+                  <div class="form-group"><label>Email <span class="req">*</span></label><input type="email" name="ca_email" placeholder="admin@company.com" /></div>
+                  <div class="form-group"><label>Password <span class="req">*</span></label><input type="password" name="ca_password" placeholder="••••••" /></div>
+                  <div class="form-group">
+                    <label>Company <span class="req">*</span></label>
+                    <select name="ca_company"><option value="">— Select Company —</option></select>
+                  </div>
+                  <button type="submit" class="btn btn-primary">Create Company Admin</button>
+                </form>
+              </div>
+              <!-- University Admin Card -->
+              <div class="card">
+                <div class="card-header"><span class="card-title">🏛️ University Admin</span></div>
+                <div id="ua-alert"></div>
+                <form id="create-university-admin-form" class="form-grid">
+                  <div class="form-group"><label>Name <span class="req">*</span></label><input type="text" name="ua_name" placeholder="Jane Doe" /></div>
+                  <div class="form-group"><label>Email <span class="req">*</span></label><input type="email" name="ua_email" placeholder="admin@university.edu" /></div>
+                  <div class="form-group"><label>Password <span class="req">*</span></label><input type="password" name="ua_password" placeholder="••••••" /></div>
+                  <div class="form-group">
+                    <label>University <span class="req">*</span></label>
+                    <select name="ua_university"><option value="">— Select University —</option></select>
+                  </div>
+                  <button type="submit" class="btn btn-primary">Create University Admin</button>
+                </form>
+              </div>
+            </div>
+          </div>
+
+          <!-- Users View -->
+          <div class="view" id="sa-users">
+            <div class="page-header"><div><h2>All Users</h2><p>Manage and moderate user accounts</p></div></div>
+            <div class="filter-bar">
+              <input type="text" id="sa-users-search" placeholder="🔍 Search by name or email…" />
+              <select id="sa-users-role-filter">
+                <option value="">All Roles</option>
+                <option value="super_admin">Super Admin</option>
+                <option value="company_admin">Company Admin</option>
+                <option value="university_admin">University Admin</option>
+                <option value="recruiter">Recruiter</option>
+                <option value="student">Student</option>
+              </select>
+            </div>
+            <div class="card">
+              <div class="table-wrap" id="sa-users-table"><div class="loading-overlay"><span class="spinner"></span> Loading…</div></div>
+            </div>
+          </div>
+
+        </div><!-- content-area -->
+      </div><!-- main-content -->
+    </div><!-- dashboard-layout -->
+  </div><!-- page-super-admin -->
+
+  <!-- ═══════════════════════════════════════════════
+       PAGE: COMPANY ADMIN
+  ════════════════════════════════════════════════ -->
+  <div class="page" id="page-company-admin">
+    <div class="dashboard-layout">
+      <aside class="sidebar">
+        <div class="sidebar-brand">
+          <div class="brand-icon">🏢</div>
+          <div>
+            <div class="brand-text">IMS Portal</div>
+            <div class="brand-sub">Company Admin</div>
+          </div>
+        </div>
+        <nav class="sidebar-nav">
+          <div class="nav-section">
+            <div class="nav-section-label">Company</div>
+            <div class="nav-item" data-view="ca-profile"><span class="nav-icon">🏢</span><span class="nav-label">Company Profile</span></div>
+            <div class="nav-item" data-view="ca-postings"><span class="nav-icon">📋</span><span class="nav-label">Postings</span></div>
+          </div>
+          <div class="nav-section">
+            <div class="nav-section-label">Team</div>
+            <div class="nav-item" data-view="ca-recruiters"><span class="nav-icon">👤</span><span class="nav-label">Recruiters</span></div>
+          </div>
+        </nav>
+        <div class="sidebar-footer">
+          <div class="sidebar-user">
+            <div class="avatar">CA</div>
+            <div class="sidebar-user-info">
+              <div class="sidebar-user-name">Company Admin</div>
+              <div class="sidebar-user-role">company admin</div>
+            </div>
+          </div>
+          <button class="btn btn-ghost btn-sm btn-full" onclick="logout()">🚪 Logout</button>
+        </div>
+      </aside>
+      <div class="main-content">
+        <header class="topbar">
+          <button class="btn btn-icon btn-ghost menu-toggle">☰</button>
+          <span class="topbar-title">Company Profile</span>
+          <div class="topbar-actions"></div>
+        </header>
+        <div class="content-area">
+
+          <!-- Company Profile View -->
+          <div class="view" id="ca-profile">
+            <div class="page-header"><div><h2>Company Profile</h2><p>View and update your company details</p></div></div>
+            <div id="ca-profile-content"><div class="loading-overlay"><span class="spinner"></span> Loading…</div></div>
+          </div>
+
+          <!-- Recruiters View -->
+          <div class="view" id="ca-recruiters">
+            <div class="page-header">
+              <div><h2>Recruiters</h2><p>Manage your hiring team</p></div>
+              <button class="btn btn-primary" onclick="openModal('modal-recruiter')">➕ Add Recruiter</button>
+            </div>
+            <div class="card">
+              <div class="table-wrap" id="ca-recruiters-table"><div class="loading-overlay"><span class="spinner"></span> Loading…</div></div>
+            </div>
+          </div>
+
+          <!-- Company Postings View -->
+          <div class="view" id="ca-postings">
+            <div class="page-header"><div><h2>Postings Overview</h2><p>All postings by your company recruiters</p></div></div>
+            <div class="card">
+              <div class="table-wrap" id="ca-postings-table"><div class="loading-overlay"><span class="spinner"></span> Loading…</div></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       PAGE: UNIVERSITY ADMIN
+  ════════════════════════════════════════════════ -->
+  <div class="page" id="page-university-admin">
+    <div class="dashboard-layout">
+      <aside class="sidebar">
+        <div class="sidebar-brand">
+          <div class="brand-icon">🏛️</div>
+          <div>
+            <div class="brand-text">IMS Portal</div>
+            <div class="brand-sub">University Admin</div>
+          </div>
+        </div>
+        <nav class="sidebar-nav">
+          <div class="nav-section">
+            <div class="nav-section-label">University</div>
+            <div class="nav-item" data-view="ua-profile"><span class="nav-icon">🏛️</span><span class="nav-label">University Profile</span></div>
+          </div>
+          <div class="nav-section">
+            <div class="nav-section-label">Students</div>
+            <div class="nav-item" data-view="ua-students"><span class="nav-icon">🎓</span><span class="nav-label">Students</span></div>
+          </div>
+          <div class="nav-section">
+            <div class="nav-section-label">Internships</div>
+            <div class="nav-item" data-view="ua-postings"><span class="nav-icon">📋</span><span class="nav-label">Browse Postings</span></div>
+          </div>
+        </nav>
+        <div class="sidebar-footer">
+          <div class="sidebar-user">
+            <div class="avatar">UA</div>
+            <div class="sidebar-user-info">
+              <div class="sidebar-user-name">University Admin</div>
+              <div class="sidebar-user-role">university admin</div>
+            </div>
+          </div>
+          <button class="btn btn-ghost btn-sm btn-full" onclick="logout()">🚪 Logout</button>
+        </div>
+      </aside>
+      <div class="main-content">
+        <header class="topbar">
+          <button class="btn btn-icon btn-ghost menu-toggle">☰</button>
+          <span class="topbar-title">University Profile</span>
+          <div class="topbar-actions"></div>
+        </header>
+        <div class="content-area">
+
+          <!-- University Profile View -->
+          <div class="view" id="ua-profile">
+            <div class="page-header"><div><h2>University Profile</h2><p>View and update your university details</p></div></div>
+            <div id="ua-profile-content"><div class="loading-overlay"><span class="spinner"></span> Loading…</div></div>
+          </div>
+
+          <!-- Students View -->
+          <div class="view" id="ua-students">
+            <div class="page-header"><div><h2>Students</h2><p>Students enrolled at your university</p></div></div>
+            <div class="filter-bar">
+              <input type="text" id="ua-students-search" placeholder="🔍 Search students…" />
+            </div>
+            <div class="card">
+              <div class="table-wrap" id="ua-students-table"><div class="loading-overlay"><span class="spinner"></span> Loading…</div></div>
+            </div>
+          </div>
+
+          <!-- Postings View -->
+          <div class="view" id="ua-postings">
+            <div class="page-header"><div><h2>Browse Postings</h2><p>Open internship opportunities</p></div></div>
+            <div class="filter-bar">
+              <input type="text" id="ua-postings-search" placeholder="🔍 Search postings…" />
+            </div>
+            <div class="postings-grid" id="ua-postings-grid"><div class="loading-overlay"><span class="spinner"></span> Loading…</div></div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       PAGE: RECRUITER
+  ════════════════════════════════════════════════ -->
+  <div class="page" id="page-recruiter">
+    <div class="dashboard-layout">
+      <aside class="sidebar">
+        <div class="sidebar-brand">
+          <div class="brand-icon">👤</div>
+          <div>
+            <div class="brand-text">IMS Portal</div>
+            <div class="brand-sub">Recruiter</div>
+          </div>
+        </div>
+        <nav class="sidebar-nav">
+          <div class="nav-section">
+            <div class="nav-section-label">Postings</div>
+            <div class="nav-item" data-view="rec-postings"><span class="nav-icon">📋</span><span class="nav-label">My Postings</span></div>
+            <div class="nav-item" data-view="rec-create"><span class="nav-icon">➕</span><span class="nav-label">Create Posting</span></div>
+          </div>
+        </nav>
+        <div class="sidebar-footer">
+          <div class="sidebar-user">
+            <div class="avatar">RC</div>
+            <div class="sidebar-user-info">
+              <div class="sidebar-user-name">Recruiter</div>
+              <div class="sidebar-user-role">recruiter</div>
+            </div>
+          </div>
+          <button class="btn btn-ghost btn-sm btn-full" onclick="logout()">🚪 Logout</button>
+        </div>
+      </aside>
+      <div class="main-content">
+        <header class="topbar">
+          <button class="btn btn-icon btn-ghost menu-toggle">☰</button>
+          <span class="topbar-title">My Postings</span>
+          <div class="topbar-actions"></div>
+        </header>
+        <div class="content-area">
+
+          <!-- My Postings View -->
+          <div class="view" id="rec-postings">
+            <div class="page-header"><div><h2>My Postings</h2><p>Manage your internship listings</p></div></div>
+            <div class="postings-grid" id="rec-postings-grid"><div class="loading-overlay"><span class="spinner"></span> Loading…</div></div>
+          </div>
+
+          <!-- Create Posting View -->
+          <div class="view" id="rec-create">
+            <div class="page-header"><div><h2>Create Posting</h2><p>Post a new internship opportunity</p></div></div>
+            <div class="card" style="max-width:680px">
+              <div id="rec-create-alert"></div>
+              <form id="create-posting-form" class="form-grid form-grid-2">
+                <div class="form-group span-2"><label>Title <span class="req">*</span></label><input type="text" name="title" placeholder="Frontend Developer Intern" /></div>
+                <div class="form-group span-2"><label>Description <span class="req">*</span></label><textarea name="description" placeholder="Role overview, responsibilities, and what you'll learn…" rows="4"></textarea></div>
+                <div class="form-group span-2"><label>Required Skills <span class="input-hint" style="font-weight:400">(comma-separated)</span></label><input type="text" name="requiredSkills" placeholder="React, Node.js, MongoDB" /></div>
+                <div class="form-group"><label>Duration (weeks)</label><input type="number" name="durationWeeks" placeholder="8" min="1" /></div>
+                <div class="form-group"><label>Openings</label><input type="number" name="openings" placeholder="3" min="1" /></div>
+                <div class="form-group"><label>Location</label><input type="text" name="location" placeholder="Bangalore / Remote" /></div>
+                <div class="form-group"><label>Mode</label><select name="mode"><option value="remote">Remote</option><option value="on-site">On-site</option><option value="hybrid">Hybrid</option></select></div>
+                <div class="form-group"><label>Application Deadline</label><input type="date" name="applicationDeadline" /></div>
+                <div class="form-group">
+                  <label>Stipend Amount (₹/mo)</label>
+                  <input type="number" name="stipendAmount" placeholder="10000" min="0" />
+                </div>
+                <div class="form-group span-2">
+                  <label class="check-group"><input type="checkbox" name="isPaid" /> Paid Internship</label>
+                </div>
+                <div class="form-group span-2" style="display:flex;gap:.6rem;justify-content:flex-end">
+                  <button type="button" class="btn btn-secondary" onclick="savePostingDraft()">Save as Draft</button>
+                  <button type="submit" class="btn btn-primary">Publish Posting</button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       PAGE: STUDENT
+  ════════════════════════════════════════════════ -->
+  <div class="page" id="page-student">
+    <div class="dashboard-layout">
+      <aside class="sidebar">
+        <div class="sidebar-brand">
+          <div class="brand-icon">🎓</div>
+          <div>
+            <div class="brand-text">IMS Portal</div>
+            <div class="brand-sub">Student</div>
+          </div>
+        </div>
+        <nav class="sidebar-nav">
+          <div class="nav-section">
+            <div class="nav-section-label">Internships</div>
+            <div class="nav-item" data-view="st-browse"><span class="nav-icon">🔍</span><span class="nav-label">Browse Postings</span></div>
+            <div class="nav-item" data-view="st-applications"><span class="nav-icon">📄</span><span class="nav-label">My Applications</span></div>
+          </div>
+          <div class="nav-section">
+            <div class="nav-section-label">Account</div>
+            <div class="nav-item" data-view="st-profile"><span class="nav-icon">👤</span><span class="nav-label">My Profile</span></div>
+          </div>
+        </nav>
+        <div class="sidebar-footer">
+          <div class="sidebar-user">
+            <div class="avatar">ST</div>
+            <div class="sidebar-user-info">
+              <div class="sidebar-user-name">Student</div>
+              <div class="sidebar-user-role">student</div>
+            </div>
+          </div>
+          <button class="btn btn-ghost btn-sm btn-full" onclick="logout()">🚪 Logout</button>
+        </div>
+      </aside>
+      <div class="main-content">
+        <header class="topbar">
+          <button class="btn btn-icon btn-ghost menu-toggle">☰</button>
+          <span class="topbar-title">Browse Postings</span>
+          <div class="topbar-actions"></div>
+        </header>
+        <div class="content-area">
+
+          <!-- Browse Postings -->
+          <div class="view" id="st-browse">
+            <div class="page-header"><div><h2>Browse Internships</h2><p>Find your perfect opportunity</p></div></div>
+            <div class="filter-bar">
+              <input type="text" id="st-skill-filter" placeholder="🔍 Filter by skill…" />
+              <button class="btn btn-secondary btn-sm" onclick="StudentDash.loadPostings()">Search</button>
+            </div>
+            <div class="postings-grid" id="st-postings-grid"><div class="loading-overlay"><span class="spinner"></span> Loading…</div></div>
+          </div>
+
+          <!-- My Applications -->
+          <div class="view" id="st-applications">
+            <div class="page-header"><div><h2>My Applications</h2><p>Track your application statuses</p></div></div>
+            <div id="st-applications-content"><div class="loading-overlay"><span class="spinner"></span> Loading…</div></div>
+          </div>
+
+          <!-- Profile -->
+          <div class="view" id="st-profile">
+            <div class="page-header"><div><h2>My Profile</h2><p>Update your details and resume</p></div></div>
+            <div id="st-profile-content"><div class="loading-overlay"><span class="spinner"></span> Loading…</div></div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- #app -->
+
+<!-- ═══════════════════════════════════════════════
+     MODALS
+════════════════════════════════════════════════ -->
+
+<!-- Confirm Modal -->
+<div class="modal-overlay" id="confirm-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="confirm-title">Confirm</h3>
+      <button class="btn btn-icon btn-ghost" onclick="closeModal('confirm-modal')">✕</button>
+    </div>
+    <div class="modal-body"><p id="confirm-message"></p></div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" id="confirm-cancel" onclick="closeModal('confirm-modal')">Cancel</button>
+      <button class="btn btn-primary" id="confirm-ok">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<!-- Company Modal -->
+<div class="modal-overlay" id="modal-company">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="modal-company-title">Add Company</h3>
+      <button class="btn btn-icon btn-ghost" onclick="closeModal('modal-company')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div id="modal-company-alert"></div>
+      <form id="company-form" class="form-grid">
+        <input type="hidden" name="company_id" />
+        <div class="form-group"><label>Name <span class="req">*</span></label><input type="text" name="company_name" placeholder="Acme Corp" /></div>
+        <div class="form-group"><label>Industry</label><input type="text" name="company_industry" placeholder="Technology" /></div>
+        <div class="form-group"><label>Website</label><input type="url" name="company_website" placeholder="https://acme.com" /></div>
+        <div class="form-group"><label>Description</label><textarea name="company_description" placeholder="Brief description…" rows="3"></textarea></div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('modal-company')">Cancel</button>
+      <button class="btn btn-primary" onclick="SuperAdminDash.submitCompany()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- University Modal -->
+<div class="modal-overlay" id="modal-university">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="modal-university-title">Add University</h3>
+      <button class="btn btn-icon btn-ghost" onclick="closeModal('modal-university')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div id="modal-university-alert"></div>
+      <form id="university-form" class="form-grid">
+        <input type="hidden" name="university_id" />
+        <div class="form-group"><label>Name <span class="req">*</span></label><input type="text" name="university_name" placeholder="IIT Delhi" /></div>
+        <div class="form-group"><label>Location</label><input type="text" name="university_location" placeholder="New Delhi" /></div>
+        <div class="form-group"><label>Website</label><input type="url" name="university_website" placeholder="https://iitd.ac.in" /></div>
+        <div class="form-group"><label>Description</label><textarea name="university_description" placeholder="Brief description…" rows="3"></textarea></div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('modal-university')">Cancel</button>
+      <button class="btn btn-primary" onclick="SuperAdminDash.submitUniversity()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- Recruiter Modal (Company Admin) -->
+<div class="modal-overlay" id="modal-recruiter">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Add Recruiter</h3>
+      <button class="btn btn-icon btn-ghost" onclick="closeModal('modal-recruiter')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div id="modal-recruiter-alert"></div>
+      <form id="recruiter-form" class="form-grid">
+        <div class="form-group"><label>Name <span class="req">*</span></label><input type="text" name="rec_name" placeholder="Anil Kumar" /></div>
+        <div class="form-group"><label>Email <span class="req">*</span></label><input type="email" name="rec_email" placeholder="anil@company.com" /></div>
+        <div class="form-group"><label>Password <span class="req">*</span></label><input type="password" name="rec_password" placeholder="••••••" /></div>
+        <div class="form-group"><label>Designation</label><input type="text" name="rec_designation" placeholder="HR Manager" /></div>
+        <div class="form-group"><label>Department</label><input type="text" name="rec_department" placeholder="Engineering" /></div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('modal-recruiter')">Cancel</button>
+      <button class="btn btn-primary" onclick="CompanyAdminDash.submitRecruiter()">Add Recruiter</button>
+    </div>
+  </div>
+</div>
+
+<!-- Posting Detail Modal (Recruiter) -->
+<div class="modal-overlay modal-lg" id="modal-posting-detail">
+  <div class="modal modal-lg">
+    <div class="modal-header">
+      <h3 id="modal-posting-title">Posting Detail</h3>
+      <button class="btn btn-icon btn-ghost" onclick="closeModal('modal-posting-detail')">✕</button>
+    </div>
+    <div class="modal-body" id="modal-posting-body"></div>
+    <div class="modal-footer" id="modal-posting-footer"></div>
+  </div>
+</div>
+
+<!-- Edit Posting Modal (Recruiter) -->
+<div class="modal-overlay" id="modal-edit-posting">
+  <div class="modal modal-lg">
+    <div class="modal-header">
+      <h3>Edit Posting</h3>
+      <button class="btn btn-icon btn-ghost" onclick="closeModal('modal-edit-posting')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div id="modal-edit-posting-alert"></div>
+      <form id="edit-posting-form" class="form-grid form-grid-2">
+        <input type="hidden" name="posting_id" />
+        <div class="form-group span-2"><label>Title <span class="req">*</span></label><input type="text" name="title" /></div>
+        <div class="form-group span-2"><label>Description</label><textarea name="description" rows="4"></textarea></div>
+        <div class="form-group span-2"><label>Required Skills (comma-separated)</label><input type="text" name="requiredSkills" /></div>
+        <div class="form-group"><label>Duration (weeks)</label><input type="number" name="durationWeeks" /></div>
+        <div class="form-group"><label>Openings</label><input type="number" name="openings" /></div>
+        <div class="form-group"><label>Location</label><input type="text" name="location" /></div>
+        <div class="form-group"><label>Mode</label><select name="mode"><option value="remote">Remote</option><option value="on-site">On-site</option><option value="hybrid">Hybrid</option></select></div>
+        <div class="form-group"><label>Application Deadline</label><input type="date" name="applicationDeadline" /></div>
+        <div class="form-group"><label>Stipend Amount (₹/mo)</label><input type="number" name="stipendAmount" /></div>
+        <div class="form-group span-2"><label class="check-group"><input type="checkbox" name="isPaid" /> Paid Internship</label></div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('modal-edit-posting')">Cancel</button>
+      <button class="btn btn-primary" onclick="RecruiterDash.submitEditPosting()">Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<!-- Apply Modal (Student) -->
+<div class="modal-overlay" id="modal-apply">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="modal-apply-title">Apply</h3>
+      <button class="btn btn-icon btn-ghost" onclick="closeModal('modal-apply')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div id="modal-apply-alert"></div>
+      <div class="form-group">
+        <label>Cover Letter <span style="font-weight:400;color:var(--text-3)">(optional)</span></label>
+        <textarea id="apply-cover-letter" rows="5" placeholder="Tell the recruiter why you're a great fit…"></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('modal-apply')">Cancel</button>
+      <button class="btn btn-primary" id="apply-submit-btn" onclick="StudentDash.submitApplication()">Submit Application</button>
+    </div>
+  </div>
+</div>
+
+<!-- Student Detail Modal (University Admin) -->
+<div class="modal-overlay" id="modal-student-detail">
+  <div class="modal modal-lg">
+    <div class="modal-header">
+      <h3 id="modal-student-title">Student Profile</h3>
+      <button class="btn btn-icon btn-ghost" onclick="closeModal('modal-student-detail')">✕</button>
+    </div>
+    <div class="modal-body" id="modal-student-body"></div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('modal-student-detail')">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- UA Posting Detail Modal -->
+<div class="modal-overlay" id="modal-ua-posting-detail">
+  <div class="modal modal-lg">
+    <div class="modal-header">
+      <h3 id="modal-ua-posting-title">Posting Detail</h3>
+      <button class="btn btn-icon btn-ghost" onclick="closeModal('modal-ua-posting-detail')">✕</button>
+    </div>
+    <div class="modal-body" id="modal-ua-posting-body"></div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('modal-ua-posting-detail')">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- Application Status Update Modal (Recruiter) -->
+<div class="modal-overlay" id="modal-app-status">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Update Application</h3>
+      <button class="btn btn-icon btn-ghost" onclick="closeModal('modal-app-status')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div id="modal-app-status-alert"></div>
+      <input type="hidden" id="app-status-posting-id" />
+      <input type="hidden" id="app-status-app-id" />
+      <div class="form-group" style="margin-bottom:1rem">
+        <label>Status <span class="req">*</span></label>
+        <select id="app-status-select">
+          <option value="applied">Applied</option>
+          <option value="under_review">Under Review</option>
+          <option value="shortlisted">Shortlisted</option>
+          <option value="rejected">Rejected</option>
+          <option value="offered">Offered</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Recruiter Note</label>
+        <textarea id="app-status-note" rows="3" placeholder="Internal note for this decision…"></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('modal-app-status')">Cancel</button>
+      <button class="btn btn-primary" onclick="RecruiterDash.submitAppStatus()">Update</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast Container -->
+<div id="toast-container"></div>
+
+<!-- Scripts -->
+<script src="js/api.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/router.js"></script>
+<script src="js/super-admin.js"></script>
+<script src="js/company-admin.js"></script>
+<script src="js/university-admin.js"></script>
+<script src="js/recruiter.js"></script>
+<script src="js/student.js"></script>
+<script>
+  // Global modal helpers
+  function openModal(id) { document.getElementById(id)?.classList.add('open'); }
+  function closeModal(id) { document.getElementById(id)?.classList.remove('open'); }
+
+  // Boot
+  document.addEventListener('DOMContentLoaded', () => Router.init());
+</script>
+</body>
+</html>
